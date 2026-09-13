@@ -130,9 +130,8 @@ datos_raw <- datos_raw |>
 - Opcional: ordenás las columnas como te gustaría verlas, por ejemplo, fecha_hora_local podría estar al principio.
 
 ```{r}
-vuelos <- read_delim(
-  "datos_raw/201912-informe-ministerio-actualizado-dic-final.csv",
-  delim = ";"
+vuelos <- readr::read_csv2(
+  "datos_raw/201912-informe-ministerio-actualizado-dic-final.csv"
 ) |>
   janitor::clean_names() |>
   rename(
