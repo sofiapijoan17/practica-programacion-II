@@ -51,7 +51,20 @@ vuelos |>
 2. Qué aeropuertos reciben más pasajeros? Generá una tabla que muestre la cantidad de pasajeros que llegan a cada aeropuerto separando vuelos domésticos e internacionales. Ordená los datos para mostrar los aeropuertos más populares primero. La tabla deberá mostrar una columna para el aeropuerto, una para la cantidad de pasajeros de vuelos domésticos y una tercera columna para la cantidad de pasajeros de vuelos internacionales.
 
 ```{r}
-
+vuelos |>
+  filter(tipo_movimiento == "ATERRIZAJE") |>
+  group_by(destino, clasificacion_vuelo) |>
+  summarise(
+    total_pasajeros = sum(pasajeros, na.rm = TRUE)
+  ) |>
+  tidyr::pivot_wider(
+    names_from = clasificacion_vuelo,
+    values_from = total_pasajeros
+  ) |>
+  mutate(
+    total = Domestico + Internacional
+  ) |>
+  arrange(desc(total))
 ```
 
 
