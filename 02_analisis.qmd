@@ -70,6 +70,8 @@ vuelos |>
 
 3. Analizar los datos puede ser difícil si no sabemos los códigos asociados a cada aeropuerto. El siguiente código lee una base de datos de aeropuertos internacionales incluyendo 2 tipos de código distintos que se usan para identificarlos, el nombre, la ciudad y el país donde se ubican. Revisá la tabla que resulta, ¿qué columnas son útiles si tuvieras que unir esta tabla con la tabla que generaste recién?
 
+La columna IATA es útil para unir ambas tablas, ya que contiene los códigos de aeropuerto de 3 letras que aparecen en la columna destino.
+
 ```{r}
 aeropuertos <- readr::read_delim("https://raw.githubusercontent.com/paocorrales/Visualizacion/main/datos/GlobalAirportDatabase.txt", delim = ":", col_names = FALSE) |> 
   select(X1:X5, X14:X16) |> 
