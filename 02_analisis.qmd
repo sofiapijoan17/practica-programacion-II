@@ -123,6 +123,33 @@ pasajeros_aeropuertos |>
 4. Para vuelos domésticos, tomá las 6 aerolíneas más populares y explorá cómo cambia la cantidad de pasajeros mes a mes a lo largo del año. Hacé un gráfico de líneas que muestre en el eje x los meses y en el eje y la cantidad de pasajeros en cada mes. Cada línea debe representar una aerolínea.
 
 ```{r}
-
+vuelos |>
+  filter(
+    clasificacion_vuelo == "Domestico" &
+    aerolinea_nombre %in% c(
+      "AEROLINEAS ARGENTINAS SA",
+      "AUSTRAL LINEAS AEREAS-CIELOS DEL SUR S.A",
+      "LAN ARGENTINA S.A. (LATAM AIRLINES)",
+      "FB LÍNEAS AÉREAS - FLYBONDI",
+      "NORWEGIAN AIR ARGENTINA S.A.U.",
+      "JETSMART AIRLINES S.A."
+    )
+  ) |>
+  mutate(
+    mes = lubridate::floor_date(fecha_hora_local, "month")
+  ) |>
+  group_by(mes, aerolinea_nombre) |>
+  summarise(
+    total_pasajeros = sum(pax, na.rm = TRUE)
+  ) |>
+  ggplot(
+    aes(
+      x = mes,
+      y = total_pasajeros,
+      color = aerolinea_nombre,
+      group = aerolinea_nombre
+    )
+  ) +
+  geom_line()
 ```
 
