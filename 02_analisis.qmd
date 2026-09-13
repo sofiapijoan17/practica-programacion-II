@@ -81,7 +81,7 @@ aeropuertos <- readr::read_delim("https://raw.githubusercontent.com/paocorrales/
 3.1 Generá una tabla que muestre la cantidad de pasajeros que viajan a otros países. ¿Qué tipo de movimiento y clasificación de vuelo tenés que usar para filtrar los movimientos correspondientes?
 
 ```{r}
-vuelos |>
+pasajeros_internacionales <- vuelos |>
   filter(
     tipo_movimiento == "DESPEGUE" &
     clasificacion_vuelo == "Internacional"
@@ -96,7 +96,17 @@ vuelos |>
 3.2 Uní esa tabla con tabla de información de aeropuertos. Investigá qué sucede con los NAs, ¿para cuántos aeropuertos no tenemos datos? 
 
 ```{r}
+pasajeros_aeropuertos <- pasajeros_internacionales |>
+  left_join(
+    aeropuertos,
+    by = c("destino" = "IATA")
+  )
 
+pasajeros_internacionales |>
+  anti_join(
+    aeropuertos,
+    by = c("destino" = "IATA")
+  )
 ```
 
 3.3 Ordená la tabla para mostrar los resultados. En la tabla deberán aparecer solo aquellos aeropuertos presentes en la tabla aeropuertos. Deberá incluir además la información de la ciudad, pais y cantidad de pasajeros. Y deberá mostrar los aeropuertos de más a menos populares.
