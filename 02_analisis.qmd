@@ -28,7 +28,10 @@ vuelos |>
     origen == "SAL" &
     destino == "EZE" &
     aerolinea_nombre == "AEROLINEAS ARGENTINAS SA" &
-    pasajeros == "44,00"
+    fecha_hora_local == lubridate::ymd_hms(
+      "2019-01-01 00:01:00",
+      tz = "UTC"
+    )
   ) |>
   select(origen, destino, aerolinea_nombre, pasajeros)
 ```
