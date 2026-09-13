@@ -130,11 +130,47 @@ datos_raw <- datos_raw |>
 - Opcional: ordenás las columnas como te gustaría verlas, por ejemplo, fecha_hora_local podría estar al principio.
 
 ```{r}
-
+vuelos <- read_delim(
+  "datos_raw/201912-informe-ministerio-actualizado-dic-final.csv",
+  delim = ";"
+) |>
+  janitor::clean_names() |>
+  rename(
+    fecha = fecha_utc,
+    tipo_movimiento = tipo_de_movimiento,
+    calidad_del_dato = calidad_dato
+  ) |>
+  mutate(
+    origen = if_else(
+      tipo_movimiento == "DESPEGUE",
+      aeropuerto,
+      origen_destino
+    ),
+    destino = if_else(
+      tipo_movimiento == "ATERRIZAJE",
+      aeropuerto,
+      origen_destino
+    )
+  ) |>
+  select(-aeropuerto, -origen_destino) |>
+  mutate(
+    fecha_hora_local = dmy_hms(
+      paste(fecha, hora_utc),
+      tz = "UTC"
+    ),
+    fecha_hora_local = with_tz(
+      fecha_hora_local,
+      tzone = "America/Argentina/Buenos_Aires"
+    )
+  ) |>
+  select(-fecha, -hora_utc)
 ```
 
 - Ahora guarda el archivo usando `write_csv()`
 
 ```{r}
-
+write_csv(
+  vuelos,
+  "datos/vuelos_2019.csv"
+)
 ```
