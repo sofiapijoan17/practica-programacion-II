@@ -85,7 +85,20 @@ La tabla resultante no deberá incluir las columnas `aeropuerto` y `origen_desti
 La función `if_else()` de dplyr es perfecta para esta tarea, te sugerimos revisar su documentación para entender cómo usarla.
 
 ```{r}
-
+datos_raw <- datos_raw |>
+  mutate(
+    origen = if_else(
+      tipo_movimiento == "DESPEGUE",
+      aeropuerto,
+      origen_destino
+    ),
+    destino = if_else(
+      tipo_movimiento == "ATERRIZAJE",
+      aeropuerto,
+      origen_destino
+    )
+  ) |>
+  select(-aeropuerto, -origen_destino)
 ```
 
 6.  Finalmente, es útil tener la información de fecha y hora en una sola columna. Además, para hacer análisis locales siempre será mejor expresar el tiempo en hora local (en vez de UTC). Generá una nueva columna que se llame `fecha_hora_local` y eliminá las columnas `fecha` y `hora_utc`.
