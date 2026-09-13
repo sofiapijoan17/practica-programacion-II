@@ -70,7 +70,7 @@ vuelos |>
 
 3. Analizar los datos puede ser difícil si no sabemos los códigos asociados a cada aeropuerto. El siguiente código lee una base de datos de aeropuertos internacionales incluyendo 2 tipos de código distintos que se usan para identificarlos, el nombre, la ciudad y el país donde se ubican. Revisá la tabla que resulta, ¿qué columnas son útiles si tuvieras que unir esta tabla con la tabla que generaste recién?
 
-La columna IATA es útil para unir ambas tablas, ya que contiene los códigos de aeropuerto de 3 letras que aparecen en la columna destino.
+La columna ICAO es útil para unir ambas tablas, ya que contiene códigos de aeropuerto de cuatro letras como los que aparecen en la columna destino de los vuelos internacionales.
 
 ```{r}
 aeropuertos <- readr::read_delim("https://raw.githubusercontent.com/paocorrales/Visualizacion/main/datos/GlobalAirportDatabase.txt", delim = ":", col_names = FALSE) |> 
@@ -99,20 +99,23 @@ pasajeros_internacionales <- vuelos |>
 pasajeros_aeropuertos <- pasajeros_internacionales |>
   left_join(
     aeropuertos,
-    by = c("destino" = "IATA")
+    by = c("destino" = "ICAO")
   )
 
 pasajeros_internacionales |>
   anti_join(
     aeropuertos,
-    by = c("destino" = "IATA")
+    by = c("destino" = "ICAO")
   )
 ```
 
 3.3 Ordená la tabla para mostrar los resultados. En la tabla deberán aparecer solo aquellos aeropuertos presentes en la tabla aeropuertos. Deberá incluir además la información de la ciudad, pais y cantidad de pasajeros. Y deberá mostrar los aeropuertos de más a menos populares.
 
 ```{r}
-
+pasajeros_aeropuertos |>
+  filter(!is.na(aeropuerto)) |>
+  select(destino, aeropuerto, ciudad, pais, total_pasajeros) |>
+  arrange(desc(total_pasajeros))
 ```
 
 
