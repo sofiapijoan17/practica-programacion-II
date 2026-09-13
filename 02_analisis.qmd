@@ -22,7 +22,15 @@ glimpse(vuelos)
 1.1 Para un vuelo doméstico, si quisieras saber cuántos pasajeros viajaron en el avión ¿qué columna necesitas mirar? Elegí un vuelo y escribí el código necesario para obtener la cantidad de pasajeros que viajaron. Seleccioná las columnas origen, destino, aerolinea_nombre y la columna que corresponde a la cantidad de pasajeros.
 
 ```{r}
-
+vuelos |>
+  filter(
+    clasificacion_vuelo == "Domestico" &
+    origen == "SAL" &
+    destino == "EZE" &
+    aerolinea_nombre == "AEROLINEAS ARGENTINAS SA" &
+    pasajeros == "44,00"
+  ) |>
+  select(origen, destino, aerolinea_nombre, pasajeros)
 ```
 
 1.2 Si quisiera saber cuántos pasajeros volaron con Aerolíneas Argentinas en 2019, ¿qué columna debería usar `pasajeros` o `pax`?  Escribí el código necesario para obtener el total de pasajeros en vuelos domésticos para cada aerolínea. Ordená la tabla resultante para que muestre los datos de mayor a menor cantidad de pasajeros.
