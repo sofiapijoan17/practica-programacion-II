@@ -6,6 +6,7 @@ editor: visual
 
 ```{r}
 library(dplyr)
+library(readr)
 ```
 
 Vamos a trabajar con datos de despegues y aterrizajes de aviones procesados por ANAC. Como la mayoría de los datos en la vida real, estos requieren cierta limpieza.
@@ -26,7 +27,10 @@ download.file(
 3.  Ahora lee el archivo usando alguna función de `readr`. Será importante revisar qué separador de columnas usa este archivo. Una manera de hacer esto es leer el archivo primero con `read_csv()` y explorar el resultado que genera.
 
 ```{r}
-
+datos_raw <- read_delim(
+  "datos_raw/201912-informe-ministerio-actualizado-dic-final.csv",
+  delim = ";"
+)
 ```
 
 A continuación encontrarás una descripción de cada columna. Es importante que entiendas que información provee cada una.
@@ -46,9 +50,15 @@ A continuación encontrarás una descripción de cada columna. Es importante que
 
 3.1 Revisa si el tipo de dato definido en la descripción coincide con lo leido en R.
 
+No todos los tipos de datos coinciden con la descripción. Fecha UTC fue leída como character en vez de fecha, Aeronave como double en vez de texto, y Pasajeros y PAX como character en vez de números enteros.
+
 3.2 Cuantás filas tiene la base datos?
 
+La base de datos tiene 580764 filas.
+
 3.3 Qué representa cada fila?
+
+Cada fila representa un movimiento de una aeronave en un aeropuerto, es decir, un despegue o un aterrizaje.
 
 4.  Las columnas tienen nombres pensados para humanos, no para computadoras. Por ejemplo `Aerolinea Nombre`, no es un nombre de columna válido en R, para poder usarla es necesario llamarla como \`Aerolinea Nombre\`, es decir, agregando el acento al revés. Esto se vuelve súper molesto a la hora de trabajar, por lo que es recomendable cambiar los nombres de las columnas luego de leer el archivo.
 
