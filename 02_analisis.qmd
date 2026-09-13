@@ -81,7 +81,15 @@ aeropuertos <- readr::read_delim("https://raw.githubusercontent.com/paocorrales/
 3.1 Generá una tabla que muestre la cantidad de pasajeros que viajan a otros países. ¿Qué tipo de movimiento y clasificación de vuelo tenés que usar para filtrar los movimientos correspondientes?
 
 ```{r}
-
+vuelos |>
+  filter(
+    tipo_movimiento == "DESPEGUE" &
+    clasificacion_vuelo == "Internacional"
+  ) |>
+  group_by(destino) |>
+  summarise(
+    total_pasajeros = sum(pasajeros, na.rm = TRUE)
+  )
 ```
 
 
