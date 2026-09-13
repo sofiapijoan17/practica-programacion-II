@@ -1,0 +1,20 @@
+---
+title: "Agrega un titulo"
+format: html
+editor: visual
+---
+
+> Borrá la consigna antes de terminar el reporte para que quede prolijo
+
+1. El objetivo es crear un reporte que presente y explique el análisis que hiciste Deberá incluir una sección donde se presentan los datos, otra sección de resultados y 
+finalmente una sección con conclusiones finales.
+
+2. Para la primera sección usá la información disponible para describir los datos. Podés además usar google para incorporar más información.
+
+3. Para los resultados elejí 2 o 3 figuras o tablas que hayas realizado en 02_analisis.qmd. Deberás incluir al menos 1 parráfo de texto (2 o 3 oraciones) asociado a cada figura o tabla que explique los resultados observados.
+
+4. Para las conclusiones, escribí 1 parrafo que resuma los resultados obtenidos y presente posibles preguntas o planes para seguir analizando los datos en un futuro.
+
+Nota: describí las figuras con tus palabras. Frases como "Este gráfico muestra la relación entre x e y" no son suficientes. Es importante describir como es esa relación, si es esperable, si genera nuevas preguntas, etc.
+
+5. Si te queda tiempo, explorá las opciones de Quarto para esconder bloques de código y renderizar el reporte en distintos formatos.

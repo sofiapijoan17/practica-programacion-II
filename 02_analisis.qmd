@@ -1,0 +1,73 @@
+---
+title: "Analisis"
+format: html
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+Con la base de datos limpia vamos a analizar los datos y responder algunas preguntas. Primero, es importante entender la información de cada columna y que representa cada fila.
+
+
+1. Lee la base de datos limpia y revisa las filas y columnas para asegurarte de que todo está en orden y que entendes qué información proveen. 
+
+```{r}
+
+```
+
+1.1 Para un vuelo doméstico, si quisieras saber cuántos pasajeros viajaron en el avión ¿qué columna necesitas mirar? Elegí un vuelo y escribí el código necesario para obtener la cantidad de pasajeros que viajaron. Seleccioná las columnas origen, destino, aerolinea_nombre y la columna que corresponde a la cantidad de pasajeros.
+
+```{r}
+
+```
+
+1.2 Si quisiera saber cuántos pasajeros volaron con Aerolíneas Argentinas en 2019, ¿qué columna debería usar `pasajeros` o `pax`?  Escribí el código necesario para obtener el total de pasajeros en vuelos domésticos para cada aerolínea. Ordená la tabla resultante para que muestre los datos de mayor a menor cantidad de pasajeros.
+
+```{r}
+
+```
+
+2. Qué aeropuertos reciben más pasajeros? Generá una tabla que muestre la cantidad de pasajeros que llegan a cada aeropuerto separando vuelos domésticos e internacionales. Ordená los datos para mostrar los aeropuertos más populares primero. La tabla deberá mostrar una columna para el aeropuerto, una para la cantidad de pasajeros de vuelos domésticos y una tercera columna para la cantidad de pasajeros de vuelos internacionales.
+
+```{r}
+
+```
+
+
+3. Analizar los datos puede ser difícil si no sabemos los códigos asociados a cada aeropuerto. El siguiente código lee una base de datos de aeropuertos internacionales incluyendo 2 tipos de código distintos que se usan para identificarlos, el nombre, la ciudad y el país donde se ubican. Revisá la tabla que resulta, ¿qué columnas son útiles si tuvieras que unir esta tabla con la tabla que generaste recién?
+
+```{r}
+aeropuertos <- readr::read_delim("https://raw.githubusercontent.com/paocorrales/Visualizacion/main/datos/GlobalAirportDatabase.txt", delim = ":", col_names = FALSE) |> 
+  select(X1:X5, X14:X16) |> 
+  rename("ICAO" = X1, "IATA" = X2, "aeropuerto" = X3, "ciudad" = X4, "pais" = X5, "altitud" = X14, "latitud" = X15, "longuitud" = X16)
+```
+
+3.1 Generá una tabla que muestre la cantidad de pasajeros que viajan a otros países. ¿Qué tipo de movimiento y clasificación de vuelo tenés que usar para filtrar los movimientos correspondientes?
+
+```{r}
+
+```
+
+
+3.2 Uní esa tabla con tabla de información de aeropuertos. Investigá qué sucede con los NAs, ¿para cuántos aeropuertos no tenemos datos? 
+
+```{r}
+
+```
+
+3.3 Ordená la tabla para mostrar los resultados. En la tabla deberán aparecer solo aquellos aeropuertos presentes en la tabla aeropuertos. Deberá incluir además la información de la ciudad, pais y cantidad de pasajeros. Y deberá mostrar los aeropuertos de más a menos populares.
+
+```{r}
+
+```
+
+
+
+4. Para vuelos domésticos, tomá las 6 aerolíneas más populares y explorá cómo cambia la cantidad de pasajeros mes a mes a lo largo del año. Hacé un gráfico de líneas que muestre en el eje x los meses y en el eje y la cantidad de pasajeros en cada mes. Cada línea debe representar una aerolínea.
+
+```{r}
+
+```
+

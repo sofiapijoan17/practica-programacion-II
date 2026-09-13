@@ -1,0 +1,93 @@
+---
+title: "Limpieza de datos"
+format: html
+editor: visual
+---
+
+```{r}
+library(dplyr)
+```
+
+Vamos a trabajar con datos de despegues y aterrizajes de aviones procesados por ANAC. Como la mayoría de los datos en la vida real, estos requieren cierta limpieza.
+
+1.  Usando R, descargá en la carpeta `datos_raw`los datos correspondientes al año 2019 que se encuentran en [esta página](https://datos.gob.ar/dataset/transporte-aterrizajes-despegues-procesados-por-administracion-nacional-aviacion-civil-anac/archivo/transporte_11894a35-de36-4579-b084-d1191f551fbe).
+
+```{r}
+url <- "https://datos.transporte.gob.ar/dataset/21038a1a-c3c7-4494-b76a-3a2a8fbb83b5/resource/d39e99eb-f170-4d92-889a-4088b90c7678/download/201912-informe-ministerio-actualizado-dic-final.csv"
+```
+
+2.  El archivo pesa más de 50 Mb y en este caso no es recomendable incluirlo en el repositorio o subirlo a GitHub. Revisa que la carpeta `datos_raw` esté incluida en el archivo `gitignore` y hace un commit de ese archivo antes de continuar.
+
+3.  Ahora lee el archivo usando alguna función de `readr`. Será importante revisar qué separador de columnas usa este archivo. Una manera de hacer esto es leer el archivo primero con `read_csv()` y explorar el resultado que genera.
+
+```{r}
+
+```
+
+A continuación encontrarás una descripción de cada columna. Es importante que entiendas que información provee cada una.
+
+-   **Fecha UTC:** Fecha ISO-8601 (date)
+-   **Hora UTC:** Tiempo ISO-8601 (time), hora UTC (Tiempo Universal Coordinado) . Al evaluar el dato, considerar que Argentina tiene hora oficial UTC -3.
+-   **Clase de Vuelo:** (todos los vuelos), Texto (string)
+-   **Clasificación Vuelo:** Texto (string). Doméstico o Internacional
+-   **Tipo de Movimiento:** Texto (string). Clasificación del tipo de movimiento. Se considera “Movimiento” a una operación de un avión en un aeropuerto, sea aterrizaje o despegue.
+-   **Aeropuerto:** Texto (string). Nombre del aeropuerto donde ocurre el movimiento en código FAA
+-   **Origen/Destino:** Texto (string). Se utiliza el código FAA para aeropuertos nacionales y OACI para aeropuertos extranjeros. IMPORTANTE: si el movimiento es de aterrizaje, el dato de esta columna corresponde al aeropuerto de origen. Si el movimiento es de despegue, el dato en esta columna corresponde al aeropuerto de destino.
+-   **Aerolínea Nombre:** Texto (string). Nombre de la línea aérea
+-   **Aeronave:** Texto (string). Código para identificar a los fabricantes de la aeronaves con la designación específica del modelo del avión
+-   **Pasajeros:** Número entero (integer). Cantidad de pasajeros por operación individual (despegue/aterrizaje). Para vuelos de cabotaje se registra despegue y aterrizaje. Al analizar un Aeropuerto individual se debe tomar el dato de esta columna.
+-   **PAX:** Número entero (integer). 1pax=1tarjeta de embarque. Usar esta columna al analizar la cantidad de pasajeros de cabotaje a nivel total país. Al analizar los pasajeros internacionales es indiferente usar esta columna o la anterior
+-   **Calidad dato:** Texto (string).
+
+3.1 Revisa si el tipo de dato definido en la descripción coincide con lo leido en R.
+
+3.2 Cuantás filas tiene la base datos?
+
+3.3 Qué representa cada fila?
+
+4.  Las columnas tienen nombres pensados para humanos, no para computadoras. Por ejemplo `Aerolinea Nombre`, no es un nombre de columna válido en R, para poder usarla es necesario llamarla como \`Aerolinea Nombre\`, es decir, agregando el acento al revés. Esto se vuelve súper molesto a la hora de trabajar, por lo que es recomendable cambiar los nombres de las columnas luego de leer el archivo.
+
+Cambia los nombres de las columnas para que se llamen `aeropuerto`, `hora_utc`, `clase_de_vuelos_todos_los_vuelos`, `clasificacion_vuelo`, `tipo_movimiento`, `aeropuerto`, `origen_destino`, `aerolinea_nombre`, `aeronave`, `pasajeros`, `pax` y `calidad_del_dato`. Podés explorar la función `rename()` de dplyr o el paquete `janitor` para esto.
+
+```{r}
+vuelos <- janitor::clean_names(vuelos)
+```
+
+5.  Las columnas `aeropuerto` y `origen_destino` son un poco confusas ya que su interpretación depende de si el registro es de un despegue o un aterrizaje (ver información sobre columnas más arriba). Queremos reemplazar estas 2 columnas por columnas nuevas llamadas `origen` y `destino` que contengan el código del aeropuerto de origen y de destino para ese movimiento. Es decir:
+
+-   La nueva columna `origen` tendrá la información de `aeropuerto` cuando tipo_movimiento es "Despegue" y la información de `origen_destino` en caso contrario.
+-   La nueva columna `destino` tendrá la información de `aeropuerto` cuando tipo_movimiento es "Aterrizaje" y la información de `origen_destino` en caso contrario.
+
+La tabla resultante no deberá incluir las columnas `aeropuerto` y `origen_destino`.
+
+La función `if_else()` de dplyr es perfecta para esta tarea, te sugerimos revisar su documentación para entender cómo usarla.
+
+```{r}
+
+```
+
+6.  Finalmente, es útil tener la información de fecha y hora en una sola columna. Además, para hacer análisis locales siempre será mejor expresar el tiempo en hora local (en vez de UTC). Generá una nueva columna que se llame `fecha_hora_local` y eliminá las columnas `fecha` y `hora_utc`.
+
+-   Primero, genera la nueva columna uniendo `fecha` y `hora_utc`. Para hacer esto, primero tendrás que unir las 2 columnas y luego convertir (o parsear) ese texto como un dato de fecha y hora. Asegurate que la nueva columna sea de tipo fecha (PoSIXct), recomendamos explorar la [familia de funciones de `lubridate` para parsear fechas](https://lubridate.tidyverse.org/reference/index.html#date-time-parsing).
+-   Ahora convertí esa fecha_hora en hora local. Para eso necesitarás la función `with_tz()` de `lubridate` e investigar que nombre toma la zona horaria de Argentina en R (les recomendamos revisar la documentación de la función).
+
+```{r}
+
+```
+
+7.  Es momento de guardar esta versión limpia y ordenada de los datos en un nuevo archivo dentro de la carpeta datos que tendrás que crear. Este archivo es el que usarás a continuación cuando hagas el análisis.
+
+-   Primero organizá el código:
+-   Uní todos los pasos anteriores en un solo bloque de código y usá la pipe.
+-   Asegurate de eliminar las columnas redundantes.
+-   Opcional: ordenás las columnas como te gustaría verlas, por ejemplo, fecha_hora_local podría estar al principio.
+
+```{r}
+
+```
+
+-   Ahora guarda el archivo usando `write_csv()`
+
+```{r}
+
+```
