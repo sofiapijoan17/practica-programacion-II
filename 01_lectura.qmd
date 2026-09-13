@@ -7,6 +7,7 @@ editor: visual
 ```{r}
 library(dplyr)
 library(readr)
+library(lubridate)
 ```
 
 Vamos a trabajar con datos de despegues y aterrizajes de aviones procesados por ANAC. Como la mayoría de los datos en la vida real, estos requieren cierta limpieza.
@@ -107,7 +108,18 @@ datos_raw <- datos_raw |>
 - Ahora convertí esa fecha_hora en hora local. Para eso necesitarás la función `with_tz()` de `lubridate` e investigar que nombre toma la zona horaria de Argentina en R (les recomendamos revisar la documentación de la función).
 
 ```{r}
-
+datos_raw <- datos_raw |>
+  mutate(
+    fecha_hora_local = dmy_hms(
+      paste(fecha, hora_utc),
+      tz = "UTC"
+    ),
+    fecha_hora_local = with_tz(
+      fecha_hora_local,
+      tzone = "America/Argentina/Buenos_Aires"
+    )
+  ) |>
+  select(-fecha, -hora_utc)
 ```
 
 7.  Es momento de guardar esta versión limpia y ordenada de los datos en un nuevo archivo dentro de la carpeta datos que tendrás que crear. Este archivo es el que usarás a continuación cuando hagas el análisis.
