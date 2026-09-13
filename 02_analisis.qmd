@@ -39,7 +39,13 @@ vuelos |>
 1.2 Si quisiera saber cuántos pasajeros volaron con Aerolíneas Argentinas en 2019, ¿qué columna debería usar `pasajeros` o `pax`?  Escribí el código necesario para obtener el total de pasajeros en vuelos domésticos para cada aerolínea. Ordená la tabla resultante para que muestre los datos de mayor a menor cantidad de pasajeros.
 
 ```{r}
-
+vuelos |>
+  filter(clasificacion_vuelo == "Domestico") |>
+  group_by(aerolinea_nombre) |>
+  summarise(
+    total_pasajeros = sum(pax, na.rm = TRUE)
+  ) |>
+  arrange(desc(total_pasajeros))
 ```
 
 2. Qué aeropuertos reciben más pasajeros? Generá una tabla que muestre la cantidad de pasajeros que llegan a cada aeropuerto separando vuelos domésticos e internacionales. Ordená los datos para mostrar los aeropuertos más populares primero. La tabla deberá mostrar una columna para el aeropuerto, una para la cantidad de pasajeros de vuelos domésticos y una tercera columna para la cantidad de pasajeros de vuelos internacionales.
