@@ -14,7 +14,9 @@ Con la base de datos limpia vamos a analizar los datos y responder algunas pregu
 1. Lee la base de datos limpia y revisa las filas y columnas para asegurarte de que todo está en orden y que entendes qué información proveen. 
 
 ```{r}
+vuelos <- readr::read_csv("datos/vuelos_2019.csv")
 
+glimpse(vuelos)
 ```
 
 1.1 Para un vuelo doméstico, si quisieras saber cuántos pasajeros viajaron en el avión ¿qué columna necesitas mirar? Elegí un vuelo y escribí el código necesario para obtener la cantidad de pasajeros que viajaron. Seleccioná las columnas origen, destino, aerolinea_nombre y la columna que corresponde a la cantidad de pasajeros.
