@@ -65,7 +65,14 @@ Cada fila representa un movimiento de una aeronave en un aeropuerto, es decir, u
 Cambia los nombres de las columnas para que se llamen `aeropuerto`, `hora_utc`, `clase_de_vuelos_todos_los_vuelos`, `clasificacion_vuelo`, `tipo_movimiento`, `aeropuerto`, `origen_destino`, `aerolinea_nombre`, `aeronave`, `pasajeros`, `pax` y `calidad_del_dato`. Podés explorar la función `rename()` de dplyr o el paquete `janitor` para esto.
 
 ```{r}
-vuelos <- janitor::clean_names(vuelos)
+datos_raw <- janitor::clean_names(datos_raw)
+
+datos_raw <- datos_raw |>
+  rename(
+    fecha = fecha_utc,
+    tipo_movimiento = tipo_de_movimiento,
+    calidad_del_dato = calidad_dato
+  )
 ```
 
 5.  Las columnas `aeropuerto` y `origen_destino` son un poco confusas ya que su interpretación depende de si el registro es de un despegue o un aterrizaje (ver información sobre columnas más arriba). Queremos reemplazar estas 2 columnas por columnas nuevas llamadas `origen` y `destino` que contengan el código del aeropuerto de origen y de destino para ese movimiento. Es decir:
